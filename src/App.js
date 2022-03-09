@@ -1,8 +1,4 @@
-import React from "react";
-
-//------------------------//
-// useSemiPersistentState //
-//------------------------//
+import React from 'react';
 
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
@@ -16,16 +12,12 @@ const useSemiPersistentState = (key, initialState) => {
   return [value, setValue];
 };
 
-//---------------//
-// App Component //
-//---------------//
-
 const App = () => {
   const stories = [
     {
-      title: "React",
-      url: "https://react.org/",
-      author: "Jordan Walke",
+      title: 'React',
+      url: 'https://reactjs.org/',
+      author: 'Jordan Walke',
       num_comments: 3,
       points: 4,
       objectID: 0,
@@ -36,7 +28,7 @@ const App = () => {
       author: 'Dan Abramov, Andrew Clark',
       num_comments: 2,
       points: 5,
-      objectID: 1
+      objectID: 1,
     },
   ];
 
@@ -55,28 +47,32 @@ const App = () => {
 
   return (
     <div>
-      <h1>My Hacker Stories</h1>
+      <h1>My Hacker Storis</h1>
 
       <InputWithLabel
         id="search"
-        label="Search"
-        search={searchTerm}
-        onSearch={handleSearch}
-      />
+        value={searchTerm}
+        onInputChange={handleSearch}
+      >
+        <strong>Search:</strong>
+      </InputWithLabel>
+
       <hr />
 
       <List list={searchedStories} />
-    </div >
-  )
+    </div>
+  );
 };
 
-//-----------------//
-//     Search      //
-//-----------------//
-
-const InputWithLabel = ({ id, label, value, type = "text", onInputChange }) => (
+const InputWithLabel = ({
+  id,
+  value,
+  type = 'text',
+  onInputChange,
+  children,
+}) => (
   <>
-    <label htmlFor="id">{label}</label>
+    <label htmlFor={id}>{children}</label>
     &nbsp;
     <input
       id={id}
@@ -87,18 +83,8 @@ const InputWithLabel = ({ id, label, value, type = "text", onInputChange }) => (
   </>
 );
 
-
-//---------------//
-//     List      //
-//---------------//
-
 const List = ({ list }) =>
-  list.map(item => (
-    <Item
-      key={item.objectID}
-      item={item}
-    />
-  ));
+  list.map(item => <Item key={item.objectID} item={item} />);
 
 const Item = ({ item }) => (
   <div>

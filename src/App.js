@@ -54,7 +54,7 @@ const App = () => {
         value={searchTerm}
         onInputChange={handleSearch}
       >
-        <strong>Search:</strong>
+        <Text style={{ fontWeight: "bold" }}>Search:</Text>
       </InputWithLabel>
 
       <hr />
@@ -95,6 +95,10 @@ const Item = ({ item }) => (
     <span>{item.num_comments}</span>
     <span>{item.points}</span>
   </div>
+);
+
+const Text = ({ children, style }) => (
+  <p style={style}>{children}</p>
 );
 
 export default App;

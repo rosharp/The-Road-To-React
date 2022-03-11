@@ -52,6 +52,7 @@ const App = () => {
       <InputWithLabel
         id="search"
         value={searchTerm}
+        isFocused
         onInputChange={handleSearch}
       >
         <Text style={{ fontWeight: "bold" }}>Search:</Text>
@@ -78,6 +79,7 @@ const InputWithLabel = ({
       id={id}
       type={type}
       value={value}
+      autoFocus={isFocused}
       onChange={onInputChange}
     />
   </>

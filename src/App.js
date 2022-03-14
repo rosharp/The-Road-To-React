@@ -19,6 +19,14 @@ const initialStories = [
   },
 ];
 
+const getAsyncStories = () =>
+  new Promise(resolve =>
+    setTimeout(
+      () => resolve({ data: { stories: initialStories } }),
+      2000
+    )
+  );
+
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
@@ -37,7 +45,13 @@ const App = () => {
     'React'
   );
 
-  const [stories, setStories] = React.useState(initialStories);
+  const [stories, setStories] = React.useState([]);
+
+  React.useEffect(() => {
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+    });
+  }, []);
 
   const handleRemoveStory = item => {
     const newStories = stories.filter(
@@ -57,7 +71,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>My Hacker Storis</h1>
+      <h1>My Hacker Stories</h1>
 
       <InputWithLabel
         id="search"
@@ -65,7 +79,7 @@ const App = () => {
         isFocused
         onInputChange={handleSearch}
       >
-        <Text style={{ fontWeight: "bold" }}>Search:</Text>
+        <strong>Search:</strong>
       </InputWithLabel>
 
       <hr />
@@ -77,19 +91,16 @@ const App = () => {
 
 const InputWithLabel = ({
   id,
-  isFocused,
   value,
   type = 'text',
   onInputChange,
+  isFocused,
   children,
 }) => {
-  // A
   const inputRef = React.useRef();
 
-  // C
   React.useEffect(() => {
-    if (isFocused && inputRef.current) {
-      // D
+    if (isFocused) {
       inputRef.current.focus();
     }
   }, [isFocused]);
@@ -98,13 +109,11 @@ const InputWithLabel = ({
     <>
       <label htmlFor={id}>{children}</label>
       &nbsp;
-      {/* B */}
       <input
         ref={inputRef}
         id={id}
         type={type}
         value={value}
-        autoFocus={isFocused}
         onChange={onInputChange}
       />
     </>
@@ -134,10 +143,6 @@ const Item = ({ item, onRemoveItem }) => (
       </button>
     </span>
   </div>
-);
-
-const Text = ({ children, style }) => (
-  <p style={style}>{children}</p>
 );
 
 export default App;

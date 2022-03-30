@@ -1,5 +1,8 @@
 import React from 'react';
 
+// A
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+
 const storiesReducer = (state, action) => {
   switch (action.type) {
     case 'STORIES_FETCH_INIT':
@@ -81,13 +84,13 @@ const App = () => {
   React.useEffect(() => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}react`) // B
+      .then(response => response.json()) // C 
       .then(result => {
         dispatchStories({
-          type: 'STORIES_FETCH_INIT',
-          payload: result.data.stories,
+          type: 'STORIES_FETCH_SUCCESS',
+          payload: result.hits, // D
         });
-        setIsLoading(false);
       })
       .catch(() =>
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
@@ -105,7 +108,7 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
-  const searchedStories = stories.filter(story =>
+  const searchedStories = stories.data.filter(story =>
     story.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -124,9 +127,9 @@ const App = () => {
 
       <hr />
 
-      {isError && <p>Something went wrong ...</p>}
+      {stories.isError && <p>Something went wrong ...</p>}
 
-      {isLoading ? (
+      {stories.isLoading ? (
         <p>Loading ...</p>
       ) : (
         <List list={searchedStories} onRemoveItem={handleRemoveStory} />
